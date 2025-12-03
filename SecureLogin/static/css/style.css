@@ -1,0 +1,68 @@
+body {
+    background-color: #0a0a0f;
+    color: #00ffc8;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.card {
+    background-color: #15151a;
+    border: 1px solid #333;
+    box-shadow: 0 0 25px rgba(0, 255, 200, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.card-header {
+    background-color: #1a1a1f;
+    border-bottom: 1px solid #00ffc8;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.form-control {
+    background-color: #0a0a0f;
+    border: 1px solid #333;
+    color: #00ffc8;
+}
+
+.form-control:focus {
+    background-color: #0a0a0f;
+    border-color: #00ffc8;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 255, 200, 0.2);
+}
+
+.btn-neon {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #00ffc8;
+    color: #00ffc8;
+    padding: 10px;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn-neon:hover {
+    background: #00ffc8;
+    color: #000;
+    box-shadow: 0 0 20px #00ffc8;
+}
+
+.modal-content {
+    background-color: #15151a;
+    border: 1px solid #00ffc8;
+    color: #00ffc8;
+}
+.modal-header { border-bottom: 1px solid #333; }
+.modal-footer { border-top: 1px solid #333; }
+.btn-close { filter: invert(1); }

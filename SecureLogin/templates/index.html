@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Corp | Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">System Access</div>
+        <div class="card-body p-4">
+            <form action="/login" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Identity</label>
+                    <input type="text" name="username" class="form-control" autocomplete="off" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Passcode</label>
+                    <input type="password" name="password" class="form-control" autocomplete="off" required>
+                </div>
+                <button type="submit" class="btn btn-neon">Connect</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">System Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" id="modalBody">
+                    {% if message %}
+                        {{ message | safe }}
+                    {% endif %}
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% if message %}
+    <script>
+        var myModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        myModal.show();
+    </script>
+    {% endif %}
+
+</body>
+</html>
