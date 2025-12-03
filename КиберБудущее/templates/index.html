@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}CyberSec Academy - Профессии в кибербезопасности{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="glitch-wrapper">
+            <h1 class="glitch" data-text="CYBERSECURITY">CYBERSECURITY</h1>
+        </div>
+        <p class="hero-subtitle typing-effect">Выбери свой путь в мире информационной безопасности</p>
+        <div class="terminal-box">
+            <div class="terminal-header">
+                <span class="terminal-btn red"></span>
+                <span class="terminal-btn yellow"></span>
+                <span class="terminal-btn green"></span>
+                <span class="terminal-title">root@cybersec:~#</span>
+            </div>
+            <div class="terminal-body">
+                <p><span class="prompt">$</span> <span class="command">whoami</span></p>
+                <p class="response">future_security_expert</p>
+                <p><span class="prompt">$</span> <span class="command">cat /etc/specialties</span></p>
+                <p class="response">pentester | analyst | forensic</p>
+                <p><span class="prompt">$</span> <span class="cursor">_</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="cyber-grid"></div>
+</section>
+
+<section class="specialties-section">
+    <h2 class="section-title">
+        <span class="bracket">[</span>
+        СПЕЦИАЛИЗАЦИИ
+        <span class="bracket">]</span>
+    </h2>
+
+    <div class="cards-container">
+        {% for key, spec in specialties.items() %}
+        <a href="/{{ key }}" class="specialty-card" data-tilt>
+            <div class="card-glow"></div>
+            <div class="card-border"></div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="fas {{ spec.icon }}"></i>
+                </div>
+                <h3 class="card-title">{{ spec.role_title }}</h3>
+                <p class="card-focus">{{ spec.core_focus }}</p>
+                <div class="card-skills">
+                    {% for skill in spec.key_competencies[:3] %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+                <div class="card-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>ПОДРОБНЕЕ</span>
+                </div>
+            </div>
+            <div class="card-scanline"></div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-number" data-target="3400000">0</div>
+            <div class="stat-label">Вакансий в мире</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="150000">0</div>
+            <div class="stat-label">Средняя зарплата ₽</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="40">0</div>
+            <div class="stat-label">% рост рынка</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

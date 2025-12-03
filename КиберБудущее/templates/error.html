@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Denied - CyberSec Academy{% endblock %}
+
+{% block content %}
+<section class="blocked-section">
+    <div class="blocked-container">
+        <div class="warning-icon pulse">
+            <i class="fas fa-ban"></i>
+        </div>
+
+        <h1 class="blocked-title glitch" data-text="ACCESS DENIED">ACCESS DENIED</h1>
+
+        <div class="blocked-terminal">
+            <div class="terminal-header">
+                <span class="terminal-btn red"></span>
+                <span class="terminal-btn yellow"></span>
+                <span class="terminal-btn green"></span>
+                <span class="terminal-title">security_log</span>
+            </div>
+            <div class="terminal-body">
+                <p class="error-line"><span class="error-prompt">[BLOCKED]</span> Suspicious request detected</p>
+                <p class="error-line"><span class="error-prompt">[FIREWALL]</span> Keyword "config" is forbidden</p>
+                <p class="error-line"><span class="info-prompt">[TIP]</span> Try alternative techniques...</p>
+                <p class="error-line"><span class="prompt">$</span> <span class="cursor">_</span></p>
+            </div>
+        </div>
+
+        <div class="security-alert">
+            <div class="alert-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>SECURITY ALERT</span>
+            </div>
+            <p>Обнаружена попытка использования запрещённого ключевого слова.</p>
+            <p class="hint">Подсказка: существуют и другие способы...</p>
+        </div>
+
+        <a href="/" class="back-home-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Вернуться на главную</span>
+        </a>
+    </div>
+</section>
+<!-- {% endblock %} -->

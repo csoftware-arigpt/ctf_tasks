@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Специальность не найдена{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="error-container">
+        <div class="error-glitch-container">
+            <h1 class="error-code glitch" data-text="404">404</h1>
+        </div>
+
+        <div class="error-terminal">
+            <div class="terminal-header">
+                <span class="terminal-btn red"></span>
+                <span class="terminal-btn yellow"></span>
+                <span class="terminal-btn green"></span>
+                <span class="terminal-title">error_log</span>
+            </div>
+            <div class="terminal-body">
+                <p class="error-line"><span class="error-prompt">[ERROR]</span> Specialty not found</p>
+                <p class="error-line"><span class="warning-prompt">[WARN]</span> Requested: <span class="highlight">{{ specialty }}</span></p>
+                <p class="error-line"><span class="info-prompt">[INFO]</span> Available: pentester, analyst, forensic</p>
+                <p class="error-line"><span class="prompt">$</span> <span class="cursor">_</span></p>
+            </div>
+        </div>
+
+        <div class="error-message">
+            <div class="skull-icon">
+                <i class="fas fa-skull-crossbones"></i>
+            </div>
+            <h2>СПЕЦИАЛЬНОСТЬ НЕ НАЙДЕНА</h2>
+            <p>Специальность "<span class="error-specialty">{{ specialty }}</span>" не существует в нашей базе данных.</p>
+        </div>
+
+        <div class="error-suggestions">
+            <p>Возможно, вы искали:</p>
+            <div class="suggestion-links">
+                <a href="/pentester" class="suggestion-btn">
+                    <i class="fas fa-user-secret"></i>
+                    Пентестер
+                </a>
+                <a href="/analyst" class="suggestion-btn">
+                    <i class="fas fa-shield-halved"></i>
+                    SOC-аналитик
+                </a>
+                <a href="/forensic" class="suggestion-btn">
+                    <i class="fas fa-magnifying-glass"></i>
+                    Криминалист
+                </a>
+            </div>
+        </div>
+
+        <a href="/" class="back-home-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Вернуться на главную</span>
+        </a>
+    </div>
+
+    <div class="floating-elements">
+        <span class="float-char">0</span>
+        <span class="float-char">1</span>
+        <span class="float-char">0</span>
+        <span class="float-char">1</span>
+        <span class="float-char">1</span>
+        <span class="float-char">0</span>
+    </div>
+</section>
+{% endblock %}

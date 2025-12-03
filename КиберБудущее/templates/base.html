@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CyberSec Academy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- Scan Lines Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="cyber-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-terminal"></i>
+                <span class="logo-text">CYBER<span class="accent">SEC</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i> Главная</a>
+                <a href="/pentester" class="nav-link"><i class="fas fa-user-secret"></i> Пентест</a>
+                <a href="/analyst" class="nav-link"><i class="fas fa-shield-halved"></i> SOC</a>
+                <a href="/forensic" class="nav-link"><i class="fas fa-magnifying-glass"></i> Форензика</a>
+            </div>
+            <div class="search-box">
+                <form action="" method="GET" id="search-form">
+                    <input type="text" id="specialty-search" placeholder="Поиск специальности..." autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-content">
+            <div class="footer-glitch" data-text="[ SYSTEM SECURE ]">[ SYSTEM SECURE ]</div>
+            <p class="footer-text">© 2024 CyberSec Academy | <span class="blink">_</span></p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

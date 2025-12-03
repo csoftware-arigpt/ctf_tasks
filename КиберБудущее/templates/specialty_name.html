@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ data.role_title }} - CyberSec Academy{% endblock %}
+
+{% block content %}
+<section class="specialty-hero">
+    <div class="specialty-hero-bg">
+        <img src="{{ url_for('static', filename=data.visual_representation.replace('static/', '')) }}" alt="{{ data.role_title }}">
+        <div class="hero-overlay"></div>
+    </div>
+    <div class="specialty-hero-content">
+        <div class="breadcrumbs">
+            <a href="/"><i class="fas fa-home"></i> Главная</a>
+            <span>/</span>
+            <span class="current">{{ specialty_key }}</span>
+        </div>
+        <h1 class="specialty-title glitch" data-text="{{ data.role_title }}">
+            {{ data.role_title }}
+        </h1>
+        <div class="specialty-focus">
+            <i class="fas fa-crosshairs"></i>
+            {{ data.core_focus }}
+        </div>
+    </div>
+</section>
+
+<section class="specialty-details">
+    <div class="details-container">
+        <div class="detail-card description-card">
+            <div class="card-header">
+                <i class="fas fa-info-circle"></i>
+                <h2>Описание профессии</h2>
+            </div>
+            <div class="card-body">
+                <p>{{ data.detailed_description }}</p>
+            </div>
+            <div class="card-decoration">
+                <div class="hex hex-1"></div>
+                <div class="hex hex-2"></div>
+            </div>
+        </div>
+
+        <div class="detail-card skills-card">
+            <div class="card-header">
+                <i class="fas fa-code"></i>
+                <h2>Ключевые компетенции</h2>
+            </div>
+            <div class="card-body">
+                <div class="skills-grid">
+                    {% for skill in data.key_competencies %}
+                    <div class="skill-item">
+                        <div class="skill-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <span>{{ skill }}</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: {{ range(70, 100) | random }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-card roadmap-card">
+            <div class="card-header">
+                <i class="fas fa-road"></i>
+                <h2>Путь развития</h2>
+            </div>
+            <div class="card-body">
+                <div class="roadmap">
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot"></div>
+                        <div class="roadmap-content">
+                            <h4>Junior</h4>
+                            <p>0-1 год опыта</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot"></div>
+                        <div class="roadmap-content">
+                            <h4>Middle</h4>
+                            <p>1-3 года опыта</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot"></div>
+                        <div class="roadmap-content">
+                            <h4>Senior</h4>
+                            <p>3-5 лет опыта</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot"></div>
+                        <div class="roadmap-content">
+                            <h4>Lead / Architect</h4>
+                            <p>5+ лет опыта</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>Готов начать?</h2>
+        <p>Присоединяйся к сообществу специалистов по кибербезопасности</p>
+        <a href="/" class="cta-button">
+            <span>Выбрать специальность</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}
