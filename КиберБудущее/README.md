@@ -23,6 +23,10 @@
 
 Jinja2 Payload
 
+### Скриншоты
+
+<img width="1677" height="920" alt="image" src="https://github.com/user-attachments/assets/68d742b2-8163-449c-9685-2b78fe6c906a" />
+
 ### **Happy Hacking!**
 
 Remake by [csoftware-arigpt](https://github.com/csoftware-arigpt)
