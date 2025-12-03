@@ -49,8 +49,11 @@
 
 **SQL Injection (Union-Based + WAF Bypass)**
 
----
+## Скриншоты
 
-**Happy Hacking!**
+<img width="1220" height="751" alt="image" src="https://github.com/user-attachments/assets/60de16cd-d057-418c-91a7-4e575feac1c8" />
+
+
+## **Happy Hacking!**
 
 by [csoftware-arigpt](https://github.com/csoftware-arigpt)
