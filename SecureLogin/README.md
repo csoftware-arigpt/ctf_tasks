@@ -27,9 +27,9 @@
     ```
 
 4.  **Установка зависимостей**
-    Установите Flask (или используйте `requirements.txt`):
+    Установите зависимости
     ```bash
-    pip install flask
+    pip install -r requirements.txt
     ```
 
 5.  **Настройка флага**
