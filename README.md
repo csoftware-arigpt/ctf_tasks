@@ -11,3 +11,4 @@
 ## 🧩 Задачи
 - [**SecureLogin — SQL Injection**](https://github.com/csoftware-arigpt/ctf_tasks/tree/main/SecureLogin)  
 - [**КиберБудущее — SSTI (Jinja2 Payload)**](https://github.com/csoftware-arigpt/ctf_tasks/tree/main/КиберБудущее)
+- [**NetDiag — Command Injection**](https://github.com/csoftware-arigpt/ctf_tasks/tree/main/NetDiag)
