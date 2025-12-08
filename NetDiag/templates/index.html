@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>NetDiag — Панель проверки хостов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --bg: #050816;
+            --bg-alt: #070b18;
+            --card-bg: rgba(10, 15, 30, 0.96);
+            --accent: #4f46e5;
+            --accent-soft: rgba(79, 70, 229, 0.15);
+            --accent-strong: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #4f46e5, #22d3ee);
+            --danger: #f97373;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(148, 163, 184, 0.3);
+            --shadow-soft: 0 20px 45px rgba(15, 23, 42, 0.9);
+            --radius-xl: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                "Segoe UI", sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.07), transparent 60%),
+                radial-gradient(circle at 80% 100%, rgba(129, 140, 248, 0.16), transparent 55%),
+                radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.10), transparent 55%),
+                var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .shell {
+            max-width: 920px;
+            width: 100%;
+        }
+
+        .card {
+            position: relative;
+            background: radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.16), transparent 55%),
+                        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.16), transparent 55%),
+                        var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 26px 28px 22px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.18), transparent 55%),
+                radial-gradient(circle at 100% 0, rgba(16, 185, 129, 0.12), transparent 50%);
+            mix-blend-mode: soft-light;
+            opacity: 0.75;
+            pointer-events: none;
+        }
+
+        .card-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 650;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #e5e7eb, #4b5563);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.7),
+                        0 12px 26px rgba(15, 23, 42, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-badge::before {
+            content: "";
+            position: absolute;
+            inset: 24% 18%;
+            border-radius: 999px;
+            background:
+                radial-gradient(circle at 12% 20%, rgba(249, 250, 251, 0.95), transparent 60%),
+                linear-gradient(145deg, #0f172a, #020617);
+        }
+
+        .app-badge::after {
+            content: "";
+            position: absolute;
+            inset: 38% 26%;
+            border-radius: 999px;
+            border: 2px solid rgba(148, 163, 184, 0.5);
+        }
+
+        .app-title span.text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            padding: 6px 10px 6px 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #bbf7d0, #22c55e);
+            box-shadow:
+                0 0 0 1px rgba(22, 163, 74, 0.7),
+                0 0 20px rgba(34, 197, 94, 0.8);
+        }
+
+        .status-label {
+            opacity: 0.9;
+        }
+
+        .status-host {
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e5e7eb;
+        }
+
+        .panes {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 820px) {
+            body {
+                padding: 22px 14px;
+                align-items: stretch;
+            }
+
+            .card {
+                padding: 22px 20px 20px;
+            }
+
+            .panes {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .panel {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+            padding: 12px 14px 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(circle at 10% 0, rgba(94, 234, 212, 0.07), transparent 55%),
+                radial-gradient(circle at 110% 130%, rgba(129, 140, 248, 0.12), transparent 55%);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .panel-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .panel-title-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            box-shadow:
+                0 0 0 1px rgba(79, 70, 229, 0.9),
+                0 0 18px rgba(79, 70, 229, 0.8);
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .panel-subtitle code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 11px;
+            padding: 2px 5px;
+            border-radius: 999px;
+            background-color: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(31, 41, 55, 0.9);
+            color: #e5e7eb;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .field-wrap {
+            position: relative;
+            flex: 1;
+        }
+
+        .field-prefix {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 76px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            border-radius: 999px;
+            margin: 1px;
+            pointer-events: none;
+            background: rgba(15, 23, 42, 0.92);
+            border-right: 1px solid rgba(55, 65, 81, 0.9);
+            color: var(--text-muted);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 9px 11px 9px 84px;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.95);
+            background: rgba(15, 23, 42, 0.96);
+            color: #e5e7eb;
+            font-size: 13px;
+            outline: none;
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, transform 0.08s ease;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(107, 114, 128, 0.9);
+        }
+
+        input[type="text"]:focus {
+            border-color: rgba(94, 234, 212, 0.85);
+            box-shadow:
+                0 0 0 1px rgba(15, 23, 42, 0.95),
+                0 0 0 1px rgba(94, 234, 212, 0.7),
+                0 0 18px rgba(94, 234, 212, 0.5);
+            background: rgba(15, 23, 42, 0.98);
+            transform: translateY(-0.5px);
+        }
+
+        button[type="submit"] {
+            border-radius: 999px;
+            border: 1px solid rgba(129, 140, 248, 0.9);
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: #f9fafb;
+            background-image: linear-gradient(140deg, #4f46e5, #22c55e);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow:
+                0 10px 25px rgba(30, 64, 175, 0.65),
+                0 0 0 1px rgba(15, 23, 42, 0.95);
+            transition: transform 0.09s ease, box-shadow 0.09s ease, filter 0.1s ease;
+            white-space: nowrap;
+        }
+
+        button[type="submit"] span.pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #f9fafb;
+            box-shadow: 0 0 0 3px rgba(248, 250, 252, 0.3);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow:
+                0 16px 35px rgba(30, 64, 175, 0.8),
+                0 0 0 1px rgba(15, 23, 42, 1);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+            box-shadow:
+                0 7px 15px rgba(30, 64, 175, 0.7),
+                0 0 0 1px rgba(15, 23, 42, 1);
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .chip {
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 11px;
+            background: rgba(15, 23, 42, 0.96);
+            border: 1px solid rgba(55, 65, 81, 0.95);
+            color: #e5e7eb;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+        }
+
+        .chip::before {
+            content: "";
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+        }
+
+        .chip--primary::before {
+            background: #4ade80;
+        }
+
+        .chip--secondary::before {
+            background: #60a5fa;
+        }
+
+        .chip--tertiary::before {
+            background: #facc15;
+        }
+
+        .chip:hover {
+            transform: translateY(-0.5px);
+            background: rgba(15, 23, 42, 0.98);
+            border-color: rgba(148, 163, 184, 0.95);
+        }
+
+        .chip:active {
+            transform: translateY(0);
+        }
+
+        .output-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .output-header-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .term-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .term-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+        }
+
+        .term-dot--red {
+            background: #f87171;
+        }
+
+        .term-dot--amber {
+            background: #fbbf24;
+        }
+
+        .term-dot--green {
+            background: #22c55e;
+        }
+
+        .output-main {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(30, 64, 175, 0.85);
+            background:
+                radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.2), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(45, 212, 191, 0.22), transparent 55%),
+                #020617;
+        }
+
+        .output-main::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(15, 23, 42, 0.55), transparent 30%),
+                radial-gradient(circle at 120% -10%, rgba(59, 130, 246, 0.35), transparent 40%),
+                radial-gradient(circle at -15% 120%, rgba(45, 212, 191, 0.3), transparent 45%);
+            mix-blend-mode: soft-light;
+            opacity: 0.75;
+            pointer-events: none;
+        }
+
+        .output-scroll {
+            position: relative;
+            max-height: 260px;
+            overflow: auto;
+            padding: 10px 12px 10px 12px;
+        }
+
+        pre {
+            margin: 0;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            color: #e5e7eb;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .placeholder {
+            font-size: 12px;
+            color: rgba(148, 163, 184, 0.95);
+        }
+
+        .placeholder strong {
+            color: #e5e7eb;
+        }
+
+        .error {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--danger);
+            background: rgba(127, 29, 29, 0.35);
+            border-radius: 9px;
+            padding: 6px 8px 7px;
+            border: 1px solid rgba(248, 113, 113, 0.7);
+        }
+
+        .footer {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .footer-badge {
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.96);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-badge span.dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow:
+                0 0 0 1px rgba(34, 197, 94, 0.9),
+                0 0 14px rgba(34, 197, 94, 0.75);
+        }
+
+        .footer-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .footer-meta code {
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 999px;
+            padding: 3px 8px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            font-size: 10px;
+            color: #e5e7eb;
+        }
+
+        .footer-meta span {
+            opacity: 0.9;
+        }
+
+        /* Custom scrollbar (for webkit) */
+        .output-scroll::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .output-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .output-scroll::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.95);
+            border-radius: 999px;
+        }
+
+        .output-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(75, 85, 99, 1);
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <div class="card">
+        <div class="card-inner">
+            <header class="header">
+                <div class="title-block">
+                    <div class="app-title">
+                        <div class="app-badge" aria-hidden="true"></div>
+                        <span class="text">NetDiag</span>
+                    </div>
+                    <p class="subtitle">
+                        Веб-панель для быстрой диагностики сетевых узлов с помощью <code>ping</code>.
+                        Введи адрес хоста и посмотри, что скажет сеть.
+                    </p>
+                </div>
+
+                <div class="status-pill">
+                    <span class="status-indicator" aria-hidden="true"></span>
+                    <span class="status-label">Статус</span>
+                    {% if host %}
+                        <span class="status-host" title="{{ host }}">{{ host }}</span>
+                    {% else %}
+                        <span class="status-host">ожидание ввода…</span>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main class="panes">
+                <section class="panel">
+                    <div class="panel-inner">
+                        <div class="panel-header">
+                            <div>
+                                <div class="panel-title">
+                                    <span class="panel-title-dot"></span>
+                                    Ввод параметров
+                                </div>
+                                <div class="panel-subtitle">
+                                    Цель:
+                                    <code>ping -c 3 {{ host if host else "HOST" }}</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form method="get" action="/">
+                            <label for="host">Хост или IP-адрес</label>
+                            <div class="input-row">
+                                <div class="field-wrap">
+                                    <div class="field-prefix">target</div>
+                                    <input
+                                        type="text"
+                                        id="host"
+                                        name="host"
+                                        value="{{ host }}"
+                                        placeholder="например: 8.8.8.8 или ya.ru"
+                                        autocomplete="off"
+                                        spellcheck="false"
+                                    >
+                                </div>
+                                <button type="submit">
+                                    <span class="pulse-dot" aria-hidden="true"></span>
+                                    <span>Запустить</span>
+                                </button>
+                            </div>
+
+                            <div class="chips">
+                                <div class="chip chip--primary" data-fill="8.8.8.8">8.8.8.8</div>
+                                <div class="chip chip--secondary" data-fill="1.1.1.1">1.1.1.1</div>
+                                <div class="chip chip--tertiary" data-fill="localhost">localhost</div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-inner">
+                        <div class="panel-header">
+                            <div>
+                                <div class="panel-title">
+                                    <span class="panel-title-dot"></span>
+                                    Результат выполнения
+                                </div>
+                                <div class="panel-subtitle">
+                                    Вывод команды <code>ping</code> и возможные сообщения об ошибках.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="output-shell">
+                            <div class="output-header">
+                                <div class="output-header-left">
+                                    <div class="term-dots" aria-hidden="true">
+                                        <span class="term-dot term-dot--red"></span>
+                                        <span class="term-dot term-dot--amber"></span>
+                                        <span class="term-dot term-dot--green"></span>
+                                    </div>
+                                    <span>Терминал</span>
+                                </div>
+                                {% if host %}
+                                    <span>host: <code>{{ host }}</code></span>
+                                {% else %}
+                                    <span>ожидает команду…</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="output-main">
+                                <div class="output-scroll">
+                                    {% if output %}
+                                        <pre>{{ output }}</pre>
+                                    {% else %}
+                                        <div class="placeholder">
+                                            <strong>Нет данных вывода.</strong><br>
+                                            Укажи хост слева и нажми «Запустить», чтобы увидеть результат работы
+                                            <code>ping</code>.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if error %}
+                                <div class="error">{{ error }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <div class="footer-badge">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span>internal diagnostics</span>
+                </div>
+                <div class="footer-meta">
+                    <span>NetDiag v0.1</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chips = document.querySelectorAll('.chip[data-fill]');
+        const input = document.getElementById('host');
+
+        if (!chips || !input) return;
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', function () {
+                const value = this.getAttribute('data-fill') || '';
+                input.value = value;
+                input.focus();
+            });
+        });
+    });
+</script>
+</body>
+</html>
