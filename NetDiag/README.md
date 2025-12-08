@@ -54,11 +54,11 @@ CTF{your_custom_flag_here}
 #### Запуск
 
 ```bash
-python3 app.py
+python3 main.py
 ```
 
 По умолчанию Flask поднимает сервис на `0.0.0.0:5000`
-Если хотите использовать порт `8080` измените запуск в `app.py`:
+Если хотите использовать порт `8080` измените запуск в `main.py`:
 
 ```python
 app.run(host="0.0.0.0", port=8080, debug=False)
