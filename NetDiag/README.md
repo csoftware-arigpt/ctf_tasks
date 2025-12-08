@@ -76,6 +76,7 @@ app.run(host="0.0.0.0", port=8080, debug=False)
 
 ## Скриншоты
 
+<img width="988" height="538" alt="image" src="https://github.com/user-attachments/assets/d9ed453d-e65c-46d7-8a8d-5162a6e21868" />
 
 
 ---
