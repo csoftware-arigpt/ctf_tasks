@@ -100,7 +100,6 @@ def check_shipping():
             selected_product=selected_product
         )
 
-    # Vulnerable command execution
     cmd = f"grep {zip_code} /etc/services"
     output = os.popen(cmd).read()
 
