@@ -12,7 +12,9 @@
 1. Создать файл с флагом на сервере (например, `flag.txt`)
 
 2. Собрать Docker-образ:
-<code>docker build -t gadgetflow-ctf .</code>
+```baash
+docker build -t gadgetflow-ctf .
+```
 
 3. Запустить контейнер:
 ```bash
