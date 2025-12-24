@@ -1,6 +1,6 @@
 # GadgetFlow
 
-Ремейк задачи "Магазин" с 1 дня новогоднего CTF от **[HackerLab x Xakep.ru](https://t.me/hacker_lab_pro/413)** на основе оригинальной веб-задачи.
+Ремейк задачи **Магазин** с 1 дня новогоднего CTF от **[HackerLab x Xakep.ru](https://t.me/hacker_lab_pro/413)** на основе оригинальной веб-задачи.
 
 ## Что было сделано?
 
@@ -42,7 +42,9 @@ python app.py
 
 - Новый, красивый интерфейс
 - Отрефакторенный код
+
 ## Скриншоты
+<img width="1901" height="959" alt="image" src="https://github.com/user-attachments/assets/7be89a8f-7874-40e8-b1c8-ec80a9b8d1c4" />
 
 
 ---
